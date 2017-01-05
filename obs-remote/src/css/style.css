@@ -1,0 +1,223 @@
+*{
+	position:relative;
+	float:left;
+	font-family:Arial;
+}
+body, html{
+	padding:0;
+	margin:0;
+}
+#main, body, html{
+	position:absolute;
+	left:0;
+	top:0;
+	min-width:800px;
+	height:100%;
+	width:100%;
+}
+
+/* STATUSBAR */
+#statusbar
+{
+	height:3%;
+	width:100%;
+	background:grey;
+	color:white;
+	font-size:125%;
+	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
+	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
+	box-shadow:         inset 0px -1px 0px 0px #000000;
+}
+#statusbar #connectionStatus
+{
+	padding-left:1%;
+}
+#statusbar #ip
+{
+	margin-left:1%;
+}
+#statusbar #wsVersion
+{
+	float:right;
+	margin-right:1%;
+}
+
+/* SCENES */
+#scenes
+{
+	width:25%;
+	height:94%;
+	background:grey;
+	color:white;
+	font-weight:bold;
+	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
+	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
+	box-shadow:         inset -1px 0px 0px 0px #000000;
+}
+#scenes #title
+{
+	height:3%;
+	width:100%;
+	text-align:center;
+	font-size:150%;
+	padding-top:3%;
+	padding-bottom:3%;
+	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
+	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
+	box-shadow:         inset 0px -1px 0px 0px #000000;
+}
+#scenes #list
+{
+	padding-top:5%;
+	height:91%;
+	width:100%;
+	overflow:auto;
+}
+#scenes #list .active
+{
+	color:greenyellow;
+}
+#scenes #list .scene
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+}
+#scenes #list .scene:hover
+{
+	cursor:pointer;
+	color:lightblue;
+}
+#scenes #list .scene_error
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+	color:red !important;
+}
+
+/* SOURCES */
+#sources
+{
+	width:25%;
+	height:94%;
+	background:grey;
+	color:white;
+	font-weight:bold;
+	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
+	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
+	box-shadow:         inset -1px 0px 0px 0px #000000;
+}
+#sources #title
+{
+	height:3%;
+	width:100%;
+	text-align:center;
+	font-size:150%;
+	padding-top:3%;
+	padding-bottom:3%;
+	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
+	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
+	box-shadow:         inset 0px -1px 0px 0px #000000;
+}
+#sources #list
+{
+	padding-top:5%;
+	height:91%;
+	width:100%;
+	overflow:auto;
+}
+#sources #list .invisible
+{
+	color:lightgrey;
+}
+#sources #list .source
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+}
+#sources #list .source:hover
+{
+	cursor:pointer;
+	color:lightblue;
+}
+#sources #list .source_error
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+	color:red !important;
+}
+
+/* TRANSITIONS */
+#transitions
+{
+	width:25%;
+	height:94%;
+	background:grey;
+	color:white;
+	font-weight:bold;
+	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
+	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
+	box-shadow:         inset -1px 0px 0px 0px #000000;
+}
+#transitions #title
+{
+	height:3%;
+	width:100%;
+	text-align:center;
+	font-size:150%;
+	padding-top:3%;
+	padding-bottom:3%;
+	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
+	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
+	box-shadow:         inset 0px -1px 0px 0px #000000;
+}
+#transitions #list
+{
+	padding-top:5%;
+	height:91%;
+	width:100%;
+	overflow:auto;
+}
+#transitions #list .active
+{
+	color:greenyellow;
+}
+#transitions #list .transition
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+}
+#transitions #list .transition:hover
+{
+	cursor:pointer;
+	color:lightblue;
+}
+#transitions #list .transition_error
+{
+	width:90%;
+	padding:0% 5% 2% 5%;
+	color:red !important;
+}
+
+/* OBS Bar */
+#obsbar
+{
+	height:3%;
+	width:100%;
+	background:grey;
+	color:white;
+	font-size:125%;
+	bottom:0;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #000000;
+	-moz-box-shadow:    inset 0px 1px 0px 0px #000000;
+	box-shadow:         inset 0px 1px 0px 0px #000000;
+}
+#obsbar #info
+{
+	float:left !important;
+	margin-left:1%;
+}
+#obsbar div, #obsbar span
+{
+	float:right;
+	margin-right:1%;
+}
