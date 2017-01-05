@@ -107,7 +107,7 @@ function OBSWebSocket() {
 var WebSocket = {};
 
 if (isModule()) {
-  WebSocket = require('ws');
+  WebSocket = require('wss');
 } else {
   WebSocket = window.WebSocket;
 }
