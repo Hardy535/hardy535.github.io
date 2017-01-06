@@ -6,7 +6,7 @@ Frontend for <a href="https://github.com/Palakis/obs-websocket">obs-websocket</a
 
 <b>Bugs</b>
 - Names with special characters like 'Ä', 'Ö' or 'ß' don't work properly (Reported: https://github.com/haganbmj/obs-websocket-js/issues/6)
-- HTTPS connections don't work without users confirmation (Reported: https://github.com/Palakis/obs-websocket/issues/26)
+- HTTPS connections to local ip's don't work without users confirmation (which is impossible on some devices) (Reported: https://github.com/Palakis/obs-websocket/issues/26)
 - Hiding/Showing Sources isn't working (Reported: https://github.com/haganbmj/obs-websocket-js/issues/7)
 - Changes of the scene list in OBS don't sync (Reported: https://github.com/haganbmj/obs-websocket-js/issues/5)
 - OBS crashes sometimes (Reported: https://github.com/Palakis/obs-websocket/issues/21)
