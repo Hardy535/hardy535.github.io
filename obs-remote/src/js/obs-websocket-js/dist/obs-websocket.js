@@ -1,6 +1,6 @@
 (function(){
 /*
- * OBS WebSocket Javascript API (obs-websocket-js) v0.1.1
+ * OBS WebSocket Javascript API (obs-websocket-js) v0.2.0
  * Author: Brendan Hagan (haganbmj)
  * Repo: git+https://github.com/haganbmj/obs-websocket-js.git
  */
@@ -51,6 +51,7 @@ function marshalOBSSource(source) { // jshint ignore:line
     this.name = (typeof name === 'undefined') ? '' : name;
     sources = (typeof sources === 'undefined') ? [] : sources;
 
+    this.sources = sources;
     var self = this;
 
     if (sources.length > 0 && !(sources[0] instanceof OBSSource)) {
@@ -97,6 +98,7 @@ function OBSWebSocket() {
   OBSWebSocket.DEFAULT_PORT = 4444;
   OBSWebSocket.CONSOLE_NAME = '[OBSWebSocket]';
 
+  this._debug = false;
   this._connected = false;
   this._socket = undefined;
   this._requestCounter = 0;
@@ -129,6 +131,9 @@ OBSWebSocket.prototype._sendRequest = function(requestType, args, callback) {
       'callbackFunction': callback
     };
 
+    if (this._debug)
+      console.log(OBSWebSocket.CONSOLE_NAME, '[sendRequest]', args);
+
     this._socket.send(JSON.stringify(args));
   } else {
     console.warn(OBSWebSocket.CONSOLE_NAME, "Not connected.");
@@ -138,6 +143,9 @@ OBSWebSocket.prototype._sendRequest = function(requestType, args, callback) {
 OBSWebSocket.prototype._onMessage = function(msg) {
   var message = JSON.parse(msg.data);
   var err = null;
+
+  if (this._debug)
+    console.log(OBSWebSocket.CONSOLE_NAME, '[onMessage]', message);
 
   if (!message)
     return;
@@ -174,8 +182,8 @@ OBSWebSocket.prototype._buildEventCallback = function(updateType, message) {
       this.onSceneSwitch(message['scene-name']);
       return;
     case 'ScenesChanged':
-      this.getSceneList(function(sceneList) {
-        self.onSceneListChanged(sceneList);
+      this.getSceneList(function(err, data) {
+        self.onSceneListChanged(data);
       });
       return;
     case 'StreamStarting':
@@ -543,7 +551,7 @@ OBSWebSocket.prototype.authenticate = function(password) {
 };
 
 /**
- * Initialize and authenticate the connection.
+ * Initialize and authenticate the WebSocket connection.
  *
  * @function
  * @category request
@@ -596,6 +604,16 @@ OBSWebSocket.prototype.connect = function(address, password) {
     // console.log(OBSWebSocket.CONSOLE_NAME, msg);
     self._onMessage(msg);
   };
+};
+
+/**
+ * Close and disconnect the WebSocket connection.
+ *
+ * @function
+ * @category request
+ */
+OBSWebSocket.prototype.disconnect = function() {
+  this._socket.close();
 };
 
 /**
@@ -671,7 +689,7 @@ OBSWebSocket.prototype.getSceneList = function(callback) {
  * @param visible {bool} - Whether the source should be visible or not.
  */
 OBSWebSocket.prototype.setSourceVisbility = function(sourceName, visible) {
-  this._sendRequest('SetSourceVisibility',
+  this._sendRequest('SetSourceRender',
   { 'source' : sourceName, 'render' : visible });
 };
 
