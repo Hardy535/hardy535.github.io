@@ -28,27 +28,32 @@
 				<input id="port" type="number" value="4444"/>
 				<button id="connect" type="button">Connect</button>
 				<input id="ipv6" type="checkbox"> use IPv6
+
+				<img id="isettings" class="icon" src="src/img/settings.svg"/> <!-- <div>Icons made by <a href="http://www.flaticon.com/authors/tutsplus" title="TutsPlus">TutsPlus</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
+				<img id="ichat" class="icon" src="src/img/chat.svg"/> <!-- <div>Icons made by <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
 				<div id="wsVersion"></div>
 			</div>
 			
-			<div id="scenes">
-				<div id="title">Scenes</div>
-				<div id="list"></div>
+			<div id="content">
+				<div id="scenes" class="column">
+					<div class="title">Scenes</div>
+					<div class="list"></div>
+				</div>
+
+				<div id="sources" class="column">
+					<div class="title">Sources</div>
+					<div class="list"></div>
+				</div>
+
+				<div id="transitions" class="column">
+					<div class="title">Transitions</div>
+					<div class="list"></div>
+				</div>
 			</div>
-			
-			<div id="sources">
-				<div id="title">Sources</div>
-				<div id="list"></div>
-			</div>
-			
-			<div id="transitions">
-				<div id="title">Transitions</div>
-				<div id="list"></div>
-			</div>
-			
+
 			<div id="obsbar">
 				<div id="info"></div>
-			
+
 				<div id="online">Offline</div>
 					<span>|</span>
 				<div id="bps">0.00 kbit/s</div>
@@ -60,6 +65,26 @@
 				<div id="fps">0.00 FPS</div>
 					<span>|</span>
 				<div id="streamTime">0:00:00</div>
+			</div>
+			
+			<div id="settings" style="visibility:hidden;">
+				<div id="background"></div>
+				<div id="s_content">
+					<div id="font-size">
+						<div class="font-size">Font size: 20</div>
+						<input type="range" min="8" max="72" value="20"/>
+					</div>
+					<placeholder></placeholder>
+					<div id="change-layout">
+						<button type="button">Edit layout (size & position) [WIP: NOT WORKING AT THE MOMENT, SORRY!]</button>
+					</div>
+					<placeholder></placeholder>
+					<div id="twitch_name">
+						<div>Twitch Username (for chat):</div>
+						<input id="twitchname" type="text" placeholder="your_username"/>
+					</div>
+					<placeholder></placeholder>
+				</div>
 			</div>
 		</div>
 	</body>
