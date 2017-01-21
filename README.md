@@ -22,4 +22,5 @@ Frontend for <a href="https://github.com/Palakis/obs-websocket">obs-websocket</a
 <b>Fixed Bugs</b>
 - Hiding/Showing Sources isn't working (Reported: https://github.com/haganbmj/obs-websocket-js/issues/7)
 - Changes of the scene list in OBS don't sync (Reported: https://github.com/haganbmj/obs-websocket-js/issues/5)
+
 <b>Thanks for fixing these bugs :)</b>
