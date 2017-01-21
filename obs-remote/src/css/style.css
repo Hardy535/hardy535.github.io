@@ -2,6 +2,7 @@
 	position:relative;
 	float:left;
 	font-family:Arial;
+	font-size:20px;
 }
 body, html{
 	padding:0;
@@ -11,22 +12,20 @@ body, html{
 	position:absolute;
 	left:0;
 	top:0;
-	min-width:800px;
 	height:100%;
 	width:100%;
+	min-width:500px;
+	overflow-x:hidden;
 }
 
 /* STATUSBAR */
 #statusbar
 {
-	height:3%;
+	position:absolute;
+	height:3rem;
 	width:100%;
-	background:grey;
 	color:white;
-	font-size:125%;
-	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
-	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
-	box-shadow:         inset 0px -1px 0px 0px #000000;
+	background:#222222;
 }
 #statusbar #connectionStatus
 {
@@ -41,175 +40,141 @@ body, html{
 	float:right;
 	margin-right:1%;
 }
+#statusbar .icon
+{
+	float:right;
+	height:60%;
+	width:auto;
+	padding:0.6rem;
+	background:grey;
+}
+#statusbar .icon:not(:first-of-type)
+{
+	margin-right:1px;
+}
+#statusbar .icon:hover
+{
+	cursor:pointer;
+	background:lightgrey;
+}
 
-/* SCENES */
-#scenes
+/* CONTENT */
+#content
+{
+	width:100%;
+	top:3rem;
+	height: -webkit-calc(100% - 6rem);
+	height: expression(100% - 6rem);
+	height: -moz-calc(100% - 6rem);
+	height: -o-calc(100% - 6rem);
+	height: calc(100% - 6rem);
+	background:#555555;
+}
+#content .column
 {
 	width:25%;
-	height:94%;
+	height:100%;
 	background:grey;
 	color:white;
 	font-weight:bold;
-	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
-	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
-	box-shadow:         inset -1px 0px 0px 0px #000000;
+	-webkit-box-shadow: inset -1px 0px 0px 0px #222222;
+	-moz-box-shadow:    inset -1px 0px 0px 0px #222222;
+	box-shadow:         inset -1px 0px 0px 0px #222222;
 }
-#scenes #title
+#content .column .title
 {
-	height:3%;
+	height:6%;
 	width:100%;
+	font-size:3vh !important;
 	text-align:center;
-	font-size:150%;
-	padding-top:3%;
-	padding-bottom:3%;
-	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
-	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
-	box-shadow:         inset 0px -1px 0px 0px #000000;
+	-webkit-box-shadow: inset 0px -1px 0px 0px #222222;
+	-moz-box-shadow:    inset 0px -1px 0px 0px #222222;
+	box-shadow:         inset 0px -1px 0px 0px #222222;
 }
-#scenes #list
+#content .column .title:before
 {
-	padding-top:5%;
-	height:91%;
+	content:"";
+	height:100%;
+	vertical-align:middle;
+	display:inline-block;
+}
+#content .column .list
+{
+	height:94%;
 	width:100%;
 	overflow:auto;
 }
-#scenes #list .active
+#content .column .list .active
 {
 	color:greenyellow;
 }
-#scenes #list .scene
+#content .column .list .error
+{
+	cursor:default !important;
+	color:red !important;
+}
+#content .column .list div
 {
 	width:90%;
-	padding:0% 5% 2% 5%;
+	padding:2% 5% 0% 5%;
 }
-#scenes #list .scene:hover
+#content .column .list div:hover
 {
 	cursor:pointer;
 	color:lightblue;
 }
-#scenes #list .scene_error
+#content .column .list div:first-child
 {
-	width:90%;
-	padding:0% 5% 2% 5%;
-	color:red !important;
+	padding-top:5% !important;
 }
-
-/* SOURCES */
-#sources
+#content .column .list div:last-child
 {
-	width:25%;
-	height:94%;
-	background:grey;
-	color:white;
-	font-weight:bold;
-	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
-	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
-	box-shadow:         inset -1px 0px 0px 0px #000000;
+	padding-bottom:5% !important;
 }
-#sources #title
+/* POSITIONS */
+#content .column .position
 {
-	height:3%;
-	width:100%;
+	position:absolute;
+	right:0;
+	height:6%;
+	width:20%;
+}
+#content .column .position .pos-left, #content .column .position .pos-right
+{
+	font-size:4.3vh;
+	height:100%;
+	width:50%;
 	text-align:center;
-	font-size:150%;
-	padding-top:3%;
-	padding-bottom:3%;
-	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
-	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
-	box-shadow:         inset 0px -1px 0px 0px #000000;
+	cursor:pointer;
 }
-#sources #list
-{
-	padding-top:5%;
-	height:91%;
-	width:100%;
-	overflow:auto;
-}
-#sources #list .invisible
+#content .column .position .pos-left:hover, #content .column .position .pos-right:hover
 {
 	color:lightgrey;
 }
-#sources #list .source
+#content .column .position .deactivated
 {
-	width:90%;
-	padding:0% 5% 2% 5%;
+	color:#555555;
+	cursor:default;
 }
-#sources #list .source:hover
+#content .column .position .deactivated:hover
 {
-	cursor:pointer;
-	color:lightblue;
-}
-#sources #list .source_error
-{
-	width:90%;
-	padding:0% 5% 2% 5%;
-	color:red !important;
+	color:#555555;
 }
 
-/* TRANSITIONS */
-#transitions
+#content #sources .list .invisible
 {
-	width:25%;
-	height:94%;
-	background:grey;
-	color:white;
-	font-weight:bold;
-	-webkit-box-shadow: inset -1px 0px 0px 0px #000000;
-	-moz-box-shadow:    inset -1px 0px 0px 0px #000000;
-	box-shadow:         inset -1px 0px 0px 0px #000000;
-}
-#transitions #title
-{
-	height:3%;
-	width:100%;
-	text-align:center;
-	font-size:150%;
-	padding-top:3%;
-	padding-bottom:3%;
-	-webkit-box-shadow: inset 0px -1px 0px 0px #000000;
-	-moz-box-shadow:    inset 0px -1px 0px 0px #000000;
-	box-shadow:         inset 0px -1px 0px 0px #000000;
-}
-#transitions #list
-{
-	padding-top:5%;
-	height:91%;
-	width:100%;
-	overflow:auto;
-}
-#transitions #list .active
-{
-	color:greenyellow;
-}
-#transitions #list .transition
-{
-	width:90%;
-	padding:0% 5% 2% 5%;
-}
-#transitions #list .transition:hover
-{
-	cursor:pointer;
-	color:lightblue;
-}
-#transitions #list .transition_error
-{
-	width:90%;
-	padding:0% 5% 2% 5%;
-	color:red !important;
+	color:lightgrey;
 }
 
 /* OBS Bar */
 #obsbar
 {
-	height:3%;
+	position:absolute;
+	height:3rem;
 	width:100%;
-	background:grey;
 	color:white;
-	font-size:125%;
 	bottom:0;
-	-webkit-box-shadow: inset 0px 1px 0px 0px #000000;
-	-moz-box-shadow:    inset 0px 1px 0px 0px #000000;
-	box-shadow:         inset 0px 1px 0px 0px #000000;
+	background:#222222;
 }
 #obsbar #info
 {
@@ -220,4 +185,74 @@ body, html{
 {
 	float:right;
 	margin-right:1%;
+}
+
+/* SETTINGS */
+placeholder
+{
+	height:1px;
+	width:105%;
+	left:-2.5%;
+	margin-top:2.5vh;
+	margin-bottom:2.5vh;
+	background:#555555;
+}
+
+#settings
+{
+	position:absolute;
+	width:100%;
+	height:100%;
+	color:white;
+	font-weight:bold;
+	z-index:100;
+}
+#settings #background
+{
+	position:absolute;
+	height:100%;
+	width:100%;
+	opacity:0.75;
+	background:black;
+}
+#settings #s_content
+{
+	position:absolute;
+	height:76%;
+	width:76%;
+	left:10%;
+	top:9%;
+	padding:1.5% 2% 1.5% 2%;
+	background:grey;
+	border:solid 1px black;
+}
+
+#settings #s_content #font-size
+{
+	width:100%;
+}
+#settings #s_content input[type=range]
+{
+	margin-top:1vh;
+	width:100%;
+}
+
+#settings #s_content #change-layout
+{
+	height:auto;
+	width:100%;
+}
+#settings #s_content #change-layout button
+{
+	height:7vh;
+	width:100%;
+}
+
+#settings #s_content #twitch_name
+{
+	width:100%;
+}
+#settings #s_content #twitch_name div
+{
+	width:100%;
 }
