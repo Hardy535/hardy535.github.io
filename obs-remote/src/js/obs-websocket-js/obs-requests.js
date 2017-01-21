@@ -70,7 +70,7 @@ OBSWebSocket.prototype.authenticate = function(password) {
 };
 
 /**
- * Initialize and authenticate the connection.
+ * Initialize and authenticate the WebSocket connection.
  *
  * @function
  * @category request
@@ -123,6 +123,16 @@ OBSWebSocket.prototype.connect = function(address, password) {
     // console.log(OBSWebSocket.CONSOLE_NAME, msg);
     self._onMessage(msg);
   };
+};
+
+/**
+ * Close and disconnect the WebSocket connection.
+ *
+ * @function
+ * @category request
+ */
+OBSWebSocket.prototype.disconnect = function() {
+  this._socket.close();
 };
 
 /**
@@ -198,7 +208,7 @@ OBSWebSocket.prototype.getSceneList = function(callback) {
  * @param visible {bool} - Whether the source should be visible or not.
  */
 OBSWebSocket.prototype.setSourceVisbility = function(sourceName, visible) {
-  this._sendRequest('SetSourceVisibility',
+  this._sendRequest('SetSourceRender',
   { 'source' : sourceName, 'render' : visible });
 };
 
