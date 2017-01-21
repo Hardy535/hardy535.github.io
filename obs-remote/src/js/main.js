@@ -16,6 +16,7 @@ $(document).ready(function()
 	ws.onConnectionClosed = function() {
 		$("#statusbar #connectionStatus").html("OBS not connected! (connection closed)");	
 		$("#statusbar #connectionStatus").css("color", "white");
+		$("#connect").html("Connect");
 		closeOBS();
 	};
 	
@@ -23,6 +24,7 @@ $(document).ready(function()
 	ws.onConnectionFailed = function() {
 		$("#statusbar #connectionStatus").html("OBS not connected! (connection failed)");	
 		$("#statusbar #connectionStatus").css("color", "red");
+		$("#statusbar #connect").html("Connect");
 	};
 	
 	/* When auth was required and succeeded */
@@ -34,43 +36,84 @@ $(document).ready(function()
 	ws.onAuthenticationFailure = function() {
 		$("#statusbar #connectionStatus").html("OBS not connected! (wrong password)");	
 		$("#statusbar #connectionStatus").css("color", "red");
+		$("#statusbar #connect").html("Connect");
 	};
 	
 	/* If scene gets changed in OBS */
 	ws.onSceneSwitch = function(sceneName) {
-		$("#scenes #list").find(".active").removeClass("active");				//Remove class 'active' from last selected scene			
-		$("#scenes #list .scene:contains("+sceneName+")").addClass("active");	//Add class 'active' to new selected scene
+		$("#scenes .list").find(".active").removeClass("active");				//Remove class 'active' from last selected scene
+		
+		sceneName = sceneName.replace(":", "\\:");
+		
+		$("#scenes .list .scene:contains("+sceneName+")").addClass("active");	//Add class 'active' to new selected scene
 		
 		/* Call to get the new sources */
 		ws.getCurrentScene(function(err, data) {
-			$("#sources #list").html("");
+			$("#sources .list").html("");
 			
 			if(data.sources !== undefined)
 			{
 				var len = data.sources.length;
 				for(var i=0; i<len; i++)
 				{
+					var source_name = data.sources[i].name;
+					source_name = source_name.replace(":", "\\:");
+					
 					if(!isAscii(data.sources[i].name))
 					{
 						console.log("[ERROR] Source ('"+data.sources[i].name+"') deactivated! Please do not use non ASCII-characters as it will not work with the plugin!");
-						$("#sources #list").append('<div class="source_error">'+data.sources[i].name+'</div>');
+						$("#sources .list").append('<div class="error">'+data.sources[i].name+'</div>');
 					}
 					else
 					{
-						$("#sources #list").append('<div class="source">'+data.sources[i].name+'</div>');
+						$("#sources .list").append('<div class="source">'+data.sources[i].name+'</div>');
+					}
+					
+					/* If source is set to invisible */
+					if(!data.sources[i].visible)
+					{
+						$("#sources .list .source:contains("+source_name+")").addClass("invisible");
 					}
 				}
 			}
 		});
 	};
 
-	/* If scene gets modified (created, removed, changed) in OBS */
-	ws.onSceneListChanged(function(response) {
-		// SO FAR BUGGED!!
-		console.log(response);
-	});
+	/* If scene gets modified (created, removed, renamed or reordered) in OBS 
+	NOTE: REMOVING, RENAMING, OR CHANGING ORDER OF SCENES DOESN'T TRIGGER THIS AT THE MOMENT! (BUG) */
+	ws.onSceneListChanged  = function(response) {
+		/* Clear scene list */
+		$("#scenes .list").html("");
+		
+		/* If there are no scenes, don't do anything */
+		if(response.scenes !== undefined)
+		{
+			var len = response.scenes.length;
+			for(var i=0; i<len; i++)
+			{
+				var scene_name = response.scenes[i].name;
+				scene_name = scene_name.replace(":", "\\:");
+				
+				if(!isAscii(response.scenes[i].name))
+				{
+					console.log("[ERROR] Scene ('"+response.scenes[i].name+"') deactivated! Please do not use non ASCII-characters as it will not work with the plugin!");
+					$("#scenes .list").append('<div class="error">'+response.scenes[i].name+'</div>');
+				}
+				else
+				{
+					$("#scenes .list").append('<div class="scene">'+response.scenes[i].name+'</div>');
+				}
+			}
+
+			var cscene_name = response.currentScene;
+			cscene_name = cscene_name.replace(":", "\\:");
+
+			$("#scenes .list .scene:contains("+cscene_name+")").addClass("active"); //Add class 'active' to new selected scene
+			
+		}
+	};
 	
-	/* If scene gets modified (created, removed, changed) in OBS */
+	/* If stream statusinfo in OBS updates */
 	ws.onStreamStatus = function(data) {
 		$("#obsbar #online").html("Online");
 		$("#obsbar #online").css("color", "greenyellow");
@@ -136,28 +179,54 @@ $(document).ready(function()
 	};
 });
 
-$(document).on("click", "#connect", function(e){
+$(document).on("click", "#statusbar #connect", function(e){
 	e.preventDefault();
 	
-	var ip, pass, port = $("#port").val();
-
-	if($("#ipv6").is(':checked'))	//User wantes to connect over IPv6
+	if($(this).html() === "Disconnect")	//User wants to disconnect
 	{
-		ip = ($("#ip").val() === "") ? "[::1]:"+port : "["+($("#ip").val())+"]:"+port;
+		ws.disconnect();
+		$(this).html("Connect");
 	}
-	else							//User wants to connect over IPv4
+	else								//User wants to connect
 	{
-		ip = ($("#ip").val() === "") ? "127.0.0.1:"+port : ($("#ip").val())+":"+port;
-	}
+		var ip, pass, port = $("#port").val();
 
-	pass = $("#pass").val();
-	ws.connect(ip, pass);
-	
-	$("#statusbar #connectionStatus").html("Connecting to OBS...");	
-	$("#statusbar #connectionStatus").css("color", "white");
+		if($("#ipv6").is(':checked'))	//User wantes to connect over IPv6
+		{
+			ip = ($("#ip").val() === "") ? "[::1]:"+port : "["+($("#ip").val())+"]:"+port;
+		}
+		else							//User wants to connect over IPv4
+		{
+			ip = ($("#ip").val() === "") ? "127.0.0.1:"+port : ($("#ip").val())+":"+port;
+		}
+
+		pass = $("#pass").val();
+		ws.connect(ip, pass);
+
+		$("#statusbar #connectionStatus").html("Connecting to OBS...");	
+		$("#statusbar #connectionStatus").css("color", "white");
+		
+		$(this).html("Disconnect");
+	}
 });
 
-$(document).on("click", "#scenes #list .scene", function(e){
+$(document).on("click", "#statusbar #ichat", function(e){
+	e.preventDefault();
+	
+	var twitchChannel = $("#settings #s_content #twitch_name #twitchname").val().toLowerCase();
+	
+	//If chat doesn't exist && Twitch Username in settings is set => Create chat
+	if($("#content #chat_embed").length === 0 && twitchChannel !== "")
+	{
+		$("#content").append("<iframe frameborder='0' scrolling='no' id='chat_embed' src='http://www.twitch.tv/"+twitchChannel+"/chat' height='100%' width='25%'></iframe>");
+	}
+	else //Chat exists => Destroy chat
+	{
+		$("#content #chat_embed").remove();
+	}
+});
+
+$(document).on("click", "#scenes .list .scene", function(e){
 	e.preventDefault();
 	
 	ws.setCurrentScene($(this).text());						//Set selected scene
@@ -165,7 +234,7 @@ $(document).on("click", "#scenes #list .scene", function(e){
 	$(this).addClass("active");								//Add class 'active' to new selected scene
 });
 
-$(document).on("click", "#sources #list .source", function(e){
+$(document).on("click", "#sources .list .source", function(e){
 	e.preventDefault();
 	
 	if(!$(this).hasClass("invisible")) //If class is not invisible, make it invisible
@@ -180,7 +249,7 @@ $(document).on("click", "#sources #list .source", function(e){
 	}									
 });
 
-$(document).on("click", "#transitions #list .transition", function(e){
+$(document).on("click", "#transitions .list .transition", function(e){
 	e.preventDefault();
 	
 	ws.setCurrentTransition($(this).text());				//Set selected transition
@@ -188,14 +257,44 @@ $(document).on("click", "#transitions #list .transition", function(e){
 	$(this).addClass("active");								//Add class 'active' to new selected transition
 });
 
+/* SETTINGS */
+
+$(document).on("click", "#statusbar #isettings", function(e){
+	e.preventDefault();
+	
+	$("#settings").css("visibility", "visible");
+});
+
+$(document).on("click", "#settings #background", function(e){
+	e.preventDefault();
+	
+	$("#settings").css("visibility", "hidden");
+});
+
+$(document).on("input change", "#settings #font-size input[type=range]", function(e) {
+	e.preventDefault();
+	
+    $(this).prev().html("Font size: "+$(this).val());
+	$("*:not(.font-size)").css("font-size", $(this).val()+"px");
+});
+
+$(document).on("click", "#settings #change-layout button", function(e) {
+    e.preventDefault();
+	
+	$("#settings").css("visibility", "hidden");
+	$(".column").append("<div class='position'> <div class='pos-left font-size'><</div> <div class='pos-right font-size'>></div> </div>");
+	$(".column .position .pos-left").first().addClass("deactivated"); //Deactivate "move-left" for the left element
+	$(".column .position .pos-right").last().addClass("deactivated"); //Deactivate "move-right" for the right element
+});
+
+/* FUNCTIONS */
+
 function loadOBS(){
 	closeOBS(); //Just to be sure that the interface is clear
 	
 	$("#statusbar #connectionStatus").html("OBS connected");	
 	$("#statusbar #connectionStatus").css("color", "greenyellow");	
 	$("#ipv6").prop("disabled", "disabled");
-	$("#connect").prop("disabled", "disabled");
-	$("#connect").html("Connected");
 
 	/* Get obs-websocket version */
 	ws.getVersion(function(err, data) {
@@ -209,25 +308,33 @@ function loadOBS(){
 			var len = data.scenes.length;
 			for(var i=0; i<len; i++)
 			{
+				var scene_name = data.scenes[i].name;
+				scene_name = scene_name.replace(":", "\\:");
+				
 				if(!isAscii(data.scenes[i].name))
 				{
 					console.log("[ERROR] Scene ('"+data.scenes[i].name+"') deactivated! Please do not use non ASCII-characters as it will not work with the plugin!");
-					$("#scenes #list").append('<div class="scene_error">'+data.scenes[i].name+'</div>');
+					$("#scenes .list").append('<div class="error">'+data.scenes[i].name+'</div>');
 				}
 				else
 				{
-					$("#scenes #list").append('<div class="scene">'+data.scenes[i].name+'</div>');
+					$("#scenes .list").append('<div class="scene">'+data.scenes[i].name+'</div>');
 				}
 			}
 
-			$("#scenes #list .scene:contains("+data.currentScene+")").addClass("active"); //Add class 'active' to selected scene on startup
+			var cscene_name = data.currentScene;
+			cscene_name = cscene_name.replace(":", "\\:");
+
+			$("#scenes .list .scene:contains("+cscene_name+")").addClass("active"); //Add class 'active' to selected scene on startup
 		}
 	});
 
 	/* Find active scene on startup */
 	ws.getCurrentScene(function(err, data) {
-		var scene = $("#scenes #list .scene:contains("+data.name+")");
-		scene.addClass("active");
+		var scene_name = data.name;
+		scene_name = scene_name.replace(":", "\\:");
+		
+		$("#scenes .list .scene:contains("+scene_name+")").addClass("active");
 
 		/* Get all sources of scene on startup */
 		if(data.sources !== undefined) //If there are no sources, don't do anything
@@ -235,14 +342,23 @@ function loadOBS(){
 			var len = data.sources.length;
 			for(var i=0; i<len; i++)
 			{
+				var source_name = data.sources[i].name;
+				source_name = source_name.replace(":", "\\:");
+				
 				if(!isAscii(data.sources[i].name))
 				{
 					console.log("[ERROR] Source ('"+data.sources[i].name+"') deactivated! Please do not use non ASCII-characters as it will not work with the plugin!");
-					$("#sources #list").append('<div class="source_error">'+data.sources[i].name+'</div>');
+					$("#sources .list").append('<div class="error">'+data.sources[i].name+'</div>');
 				}
 				else
 				{
-					$("#sources #list").append('<div class="source">'+data.sources[i].name+'</div>');
+					$("#sources .list").append('<div class="source">'+data.sources[i].name+'</div>');
+				}
+				
+				/* If source is set to invisible */
+				if(!data.sources[i].visible)
+				{
+					$("#sources .list .source:contains("+source_name+")").addClass("invisible");
 				}
 			}
 		}
@@ -258,25 +374,23 @@ function loadOBS(){
 				if(!isAscii(data.transitions[i].name))
 				{
 					console.log("[ERROR] Transition ('"+data.transitions[i].name+"') deactivated! Please do not use non ASCII-characters as it will not work with the plugin!");
-					$("#transitions #list").append('<div class="transition_error">'+data.transitions[i].name+'</div>');
+					$("#transitions .list").append('<div class="error">'+data.transitions[i].name+'</div>');
 				}
 				else
 				{
-					$("#transitions #list").append('<div class="transition">'+data.transitions[i].name+'</div>');
+					$("#transitions .list").append('<div class="transition">'+data.transitions[i].name+'</div>');
 				}
 			}
 
-			$("#transitions #list .transition:contains("+data.currentTransition+")").addClass("active"); //Add class 'active' to selected transition on startup
+			$("#transitions .list .transition:contains("+data.currentTransition+")").addClass("active"); //Add class 'active' to selected transition on startup
 		}
 	});
 }
 
 function closeOBS(){
-	$("#scenes #list").html("");
-	$("#sources #list").html("");
-	$("#transitions #list").html("");
-	$("#connect").html("Connect");
-	$("#connect").prop("disabled", "");
+	$("#scenes .list").html("");
+	$("#sources .list").html("");
+	$("#transitions .list").html("");
 	$("#ipv6").prop("disabled", "");
 }
 
