@@ -7,9 +7,9 @@ Frontend for <a href="https://github.com/Palakis/obs-websocket">obs-websocket</a
 <b>Bugs</b>
 - Names with special characters like 'Ä', 'Ö' or 'ß' don't work properly (Reported: https://github.com/haganbmj/obs-websocket-js/issues/6)
 - HTTPS connections to local ip's don't work without users confirmation (which is impossible on some devices) (Reported: https://github.com/Palakis/obs-websocket/issues/26)
-- Hiding/Showing Sources isn't working (Reported: https://github.com/haganbmj/obs-websocket-js/issues/7)
-- Changes of the scene list in OBS don't sync (Reported: https://github.com/haganbmj/obs-websocket-js/issues/5)
 - OBS crashes sometimes (Reported: https://github.com/Palakis/obs-websocket/issues/21)
+- Deleting, renaming or changing order of scenes doesn't trigger anything (Known: https://github.com/haganbmj/obs-websocket-js/issues/5)
+- Changing the source visibility in OBS doesn't trigger anything
 
 <b>ToDo</b>
 - Mobile/Tablet versions (layout) for easier use
@@ -17,5 +17,9 @@ Frontend for <a href="https://github.com/Palakis/obs-websocket">obs-websocket</a
 - Customisable colors for everything
 - Save the customisables somehow (maybe with cookies)
 - Autologin via URL (?password=...)
-- Reload/Reconnect button
 - Keep this up to date ;)
+
+<b>Fixed Bugs</b>
+- Hiding/Showing Sources isn't working (Reported: https://github.com/haganbmj/obs-websocket-js/issues/7)
+- Changes of the scene list in OBS don't sync (Reported: https://github.com/haganbmj/obs-websocket-js/issues/5)
+<b>Thanks for fixing these bugs :)</b>
